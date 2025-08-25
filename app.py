@@ -19,6 +19,29 @@ FILE_EXPIRY_TIME = 300  # 5 minutes
 # Create downloads directory
 os.makedirs(DOWNLOAD_DIR, exist_ok=True)
 
+# Check if cookies.txt exists at startup
+def initialize_cookies():
+    """Check and validate cookies.txt file at startup"""
+    if os.path.exists(COOKIE_FILE):
+        try:
+            with open(COOKIE_FILE, 'r', encoding='utf-8') as f:
+                content = f.read().strip()
+                if content:
+                    print("✓ Found and loaded cookies.txt file")
+                    return True
+                else:
+                    print("⚠ cookies.txt is empty")
+                    return False
+        except Exception as e:
+            print(f"⚠ Error reading cookies.txt: {e}")
+            return False
+    else:
+        print("⚠ No cookies.txt file found - some videos may not be accessible")
+        return False
+
+# Initialize cookies on startup
+cookie_status = initialize_cookies()
+
 # Store for tracking downloads
 downloads = {}
 
